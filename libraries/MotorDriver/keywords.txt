@@ -1,0 +1,27 @@
+#######################################
+# Syntax Coloring Map For Keyboard
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MotorDriver	KEYWORD1
+
+LockedAntiphaseMD	KEYWORD1
+SignMagnitudeMD	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+drive	KEYWORD2
+safeDrive	KEYWORD2
+deadtimeDrive	KEYWORD2
+brake	KEYWORD2
+free	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
