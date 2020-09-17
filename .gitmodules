@@ -1,0 +1,3 @@
+[submodule "libraries/PlainSerial"]
+	path = libraries/PlainSerial
+	url = https://github.com/TaiyouKomazawa16/PlainSerial
