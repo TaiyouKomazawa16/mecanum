@@ -70,10 +70,10 @@ void init_qei()
 void init_pid()
 {
                         /*kp    ki    kd   ctrl_freq*/
-  pid[0] = new FastPID  (0.42, 0.38, 0.0015, 50 /*Hz*/);
-  pid[1] = new FastPID  (0.42, 0.38, 0.0015, 50 /*Hz*/);
-  pid[2] = new FastPID  (0.42, 0.38, 0.0015, 50 /*Hz*/);
-  pid[3] = new FastPID  (0.42, 0.38, 0.0015, 50 /*Hz*/);
+  pid[0] = new FastPID  (0.42, 0.18, 0.0015, 200 /*Hz*/);
+  pid[1] = new FastPID  (0.42, 0.18, 0.0015, 200 /*Hz*/);
+  pid[2] = new FastPID  (0.42, 0.18, 0.0015, 200 /*Hz*/);
+  pid[3] = new FastPID  (0.42, 0.18, 0.0015, 200 /*Hz*/);
 }
 
 void init_wheels()
@@ -123,5 +123,5 @@ void loop()
   //cmd:  received command velocity data [m/s](yaw[rad/s])
   mv->move(cmd.x(), cmd.y(), cmd.yaw());
 
-  delay(15);
+  delay(5);
 }
