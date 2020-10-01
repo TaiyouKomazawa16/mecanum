@@ -20,10 +20,10 @@ public:
     {
         int x_mmps = 1000 * x_mps;
         int y_mmps = 1000 * y_mps;
-        int fl = -(x_mmps + y_mmps - theta * _wheel_span);
-        int rl = -(x_mmps - y_mmps - theta * _wheel_span);
-        int rr = x_mmps + y_mmps + theta * _wheel_span;
-        int fr = x_mmps - y_mmps + theta * _wheel_span;
+        int fl = -(x_mmps - y_mmps - theta * _wheel_span);
+        int rl = -(x_mmps + y_mmps - theta * _wheel_span);
+        int rr = x_mmps - y_mmps + theta * _wheel_span;
+        int fr = x_mmps + y_mmps + theta * _wheel_span;
         
         _FLeft->set_mmps(fl);
         _RLeft->set_mmps(rl);
@@ -38,7 +38,7 @@ public:
         double rr = _RRight->get_mm();
         double fr = _FRight->get_mm();
 
-      y_m = ((fl - rl + rr - fr) / 4.0) / 1000.0;
+      y_m = ((-fl + rl - rr + fr) / 4.0) / 1000.0;
 	    x_m = ((fl + rl + rr + fr) / 4.0) / 1000.0;
 	    theta = (-fl - rl + rr + fr) / (4.0 * _wheel_span); 
     }
