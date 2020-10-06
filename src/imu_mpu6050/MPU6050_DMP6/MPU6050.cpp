@@ -3294,7 +3294,7 @@ void MPU6050::PID(uint8_t ReadAddress, float kP,float kI, uint8_t Loops){
 	float Error, PTerm, ITerm[3];
 	int16_t eSample;
 	uint32_t eSum ;
-	Serial.write('>');
+	//Serial.write('>');
 	for (int i = 0; i < 3; i++) {
 		I2Cdev::readWords(devAddr, SaveAddress + (i * shift), 1, (uint16_t *)&Data); // reads 1 or more 16 bit integers (Word)
 		Reading = Data;
@@ -3325,13 +3325,13 @@ void MPU6050::PID(uint8_t ReadAddress, float kP,float kI, uint8_t Loops){
 			}
 			if((c == 99) && eSum > 1000){						// Error is still to great to continue 
 				c = 0;
-				Serial.write('*');
+				//Serial.write('*');
 			}
 			if((eSum * ((ReadAddress == 0x3B)?.05: 1)) < 5) eSample++;	// Successfully found offsets prepare to  advance
 			if((eSum < 100) && (c > 10) && (eSample >= 10)) break;		// Advance to next Loop
 			delay(1);
 		}
-		Serial.write('.');
+		//Serial.write('.');
 		kP *= .75;
 		kI *= .75;
 		for (int i = 0; i < 3; i++){
@@ -3352,7 +3352,7 @@ void MPU6050::PrintActiveOffsets() {
 	int16_t Data[3];
 	//Serial.print(F("Offset Register 0x"));
 	//Serial.print(AOffsetRegister>>4,HEX);Serial.print(AOffsetRegister&0x0F,HEX);
-	Serial.print(F("\n//           X Accel  Y Accel  Z Accel   X Gyro   Y Gyro   Z Gyro\n//OFFSETS   "));
+	//Serial.print(F("\n//           X Accel  Y Accel  Z Accel   X Gyro   Y Gyro   Z Gyro\n//OFFSETS   "));
 	if(AOffsetRegister == 0x06)	I2Cdev::readWords(devAddr, AOffsetRegister, 3, (uint16_t *)Data);
 	else {
 		I2Cdev::readWords(devAddr, AOffsetRegister, 1, (uint16_t *)Data);
@@ -3360,12 +3360,12 @@ void MPU6050::PrintActiveOffsets() {
 		I2Cdev::readWords(devAddr, AOffsetRegister+6, 1, (uint16_t *)Data+2);
 	}
 	//	A_OFFSET_H_READ_A_OFFS(Data);
-	printfloatx("", Data[0], 5, 0, ",  ");
+	/*printfloatx("", Data[0], 5, 0, ",  ");
 	printfloatx("", Data[1], 5, 0, ",  ");
-	printfloatx("", Data[2], 5, 0, ",  ");
+	printfloatx("", Data[2], 5, 0, ",  ");*/
 	I2Cdev::readWords(devAddr, 0x13, 3, (uint16_t *)Data);
 	//	XG_OFFSET_H_READ_OFFS_USR(Data);
-	printfloatx("", Data[0], 5, 0, ",  ");
+	/*printfloatx("", Data[0], 5, 0, ",  ");
 	printfloatx("", Data[1], 5, 0, ",  ");
-	printfloatx("", Data[2], 5, 0, "\n");
+	printfloatx("", Data[2], 5, 0, "\n");*/
 }
