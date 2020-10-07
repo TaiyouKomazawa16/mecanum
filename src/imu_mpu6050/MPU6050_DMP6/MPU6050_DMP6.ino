@@ -182,6 +182,7 @@ void setup() {
     // really up to you depending on your project)
     //Serial.begin(115200);
     Serial.begin(9600);
+    uart.wait_host("Imu");
     while (!Serial); // wait for Leonardo enumeration, others continue immediately
 
     // NOTE: 8MHz or slower host processors, like the Teensy @ 3.3V or Arduino

@@ -97,6 +97,7 @@ void setup()
   Serial.begin(9600);
   uart.add_frame(&cmd);
   uart.add_frame(&bools);
+  uart.wait_host("Movement");
 }
 
 void loop()
