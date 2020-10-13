@@ -124,5 +124,5 @@ void loop()
   //cmd:  received command velocity data [m/s](yaw[rad/s])
   mv->move(cmd.x(), cmd.y(), cmd.yaw());
 
-  delay(5);
+  delay(1);
 }
