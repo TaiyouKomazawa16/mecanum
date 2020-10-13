@@ -14,6 +14,10 @@ public:
         _RLeft = RLeft;
         _RRight = RRight;
         _FRight = FRight;
+        _prev_x = 0;
+        _prev_y = 0;
+        _prev_time = millis();
+        delay(1);
     }
 
     void move(double x_mps, double y_mps, float theta)
@@ -31,16 +35,27 @@ public:
         _FRight->set_mmps(fr);
     }
 
-    void get_odom(double &x_m, double &y_m, double &theta) 
+    void get_odom(double &x_vel, double &y_vel, double &theta) 
     {
         double fl = - _FLeft->get_mm();
         double rl = - _RLeft->get_mm();
         double rr = _RRight->get_mm();
         double fr = _FRight->get_mm();
 
-      y_m = ((-fl + rl - rr + fr) / 4.0) / 1000.0;
-	    x_m = ((fl + rl + rr + fr) / 4.0) / 1000.0;
-	    theta = (-fl - rl + rr + fr) / (4.0 * _wheel_span); 
+        double x = ((fl + rl + rr + fr) / 4.0);
+        double y = ((-fl + rl - rr + fr) / 4.0);
+        double dt = (millis() - _prev_time);
+        _prev_time = millis();
+        
+        double div_x = (x - _prev_x) / dt;
+        double div_y = (y - _prev_y) / dt;
+
+        theta = (-fl - rl + rr + fr) / (4.0 * _wheel_span); 
+        x_vel = div_x*cos(theta) - div_y*sin(theta);
+        y_vel = div_x*sin(theta) + div_y*cos(theta);
+
+        _prev_x = x;
+        _prev_y = y;
     }
 
     void reset()
@@ -53,6 +68,8 @@ public:
 
 private:
     Wheel *_FLeft, *_RLeft, *_RRight, *_FRight;
+    double _prev_x, _prev_y;
+    long _prev_time;
     int _wheel_span;
 };
 

@@ -102,7 +102,7 @@ void setup()
 
 void loop()
 {
-  //odom:   odometry data [m](yaw[rad])
+  //odom:   odometry data [m/s](yaw[rad])
   mv->get_odom(odom_x, odom_y, odom_yaw);
   odom.x(odom_x);
   odom.y(odom_y);
