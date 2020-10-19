@@ -282,8 +282,8 @@ void loop() {
             Serial.println(q.z);
             */
             imu_frame.w(q.w);
-            imu_frame.x(q.x);
-            imu_frame.y(q.y);
+            imu_frame.x(q.y);
+            imu_frame.y(-q.x);
             imu_frame.z(q.z);
         
             uart.write(0, &imu_frame);
