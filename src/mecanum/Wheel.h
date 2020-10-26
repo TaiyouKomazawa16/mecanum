@@ -6,8 +6,8 @@
 #include <Arduino.h>
 #include <MotorDriver.h>
 #include <SoftwareQEI.h>
-#include <FastPID.h>
 
+#include "FastPID.h"
 
 #define RADPS_RANGE 1000
 

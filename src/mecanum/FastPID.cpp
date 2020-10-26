@@ -8,6 +8,7 @@ FastPID::~FastPID() {
 void FastPID::clear() {
   _last_sp = 0; 
   _last_out = 0;
+  _last_fb = 0;
   _sum = 0; 
   _last_err = 0;
   _cfg_err = false;
@@ -60,6 +61,10 @@ bool FastPID::configure(float kp, float ki, float kd, float hz, int bits, bool s
   return ! _cfg_err; 
 }
 
+void FastPID::set_pi_d_mode(bool enable) {
+  _pi_d_mode = enable;
+}
+
 uint32_t FastPID::floatToParam(float in) {
   if (in > PARAM_MAX || in < 0) {
     _cfg_err = true;
@@ -102,7 +107,7 @@ int16_t FastPID::step(int16_t sp, int16_t fb) {
     I = _sum;
   }
 
-  if (_d) {
+  if (_d && !_pi_d_mode) {
     // (int17 - int16) - (int16 - int16) = int19
     int32_t deriv = (err - _last_err) - int32_t(sp - _last_sp);
     _last_sp = sp; 
@@ -116,6 +121,16 @@ int16_t FastPID::step(int16_t sp, int16_t fb) {
 
     // int16 * int16 = int32
     D = int32_t(_d) * int32_t(deriv);
+  }else if(_d){
+    int32_t deriv = fb - _last_fb;
+    // Limit the derivative to 16-bit signed value.
+    if (deriv > DERIV_MAX)
+      deriv = DERIV_MAX;
+    else if (deriv < DERIV_MIN)
+      deriv = DERIV_MIN;
+
+    // int16 * int16 = int32
+    D = - (int32_t(_d) * int32_t(deriv));
   }
 
   // int32 (P) + int32 (I) + int32 (D) = int34

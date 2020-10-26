@@ -24,8 +24,9 @@ public:
     clear();
   }
 
-  FastPID(float kp, float ki, float kd, float hz, int bits=16, bool sign=false)
+  FastPID(float kp, float ki, float kd, float hz, int bits=16, bool sign=false, bool pi_d_mode=false)
   {
+    set_pi_d_mode(pi_d_mode);
     configure(kp, ki, kd, hz, bits, sign);
   }
 
@@ -33,6 +34,7 @@ public:
 
   bool setCoefficients(float kp, float ki, float kd, float hz);
   bool setOutputConfig(int bits, bool sign);
+  void set_pi_d_mode(bool enable);
   bool setOutputRange(int16_t min, int16_t max);
   void clear();
   bool configure(float kp, float ki, float kd, float hz, int bits=16, bool sign=false);
@@ -53,9 +55,12 @@ private:
   uint32_t _p, _i, _d;
   int64_t _outmax, _outmin; 
   bool _cfg_err; 
+
+  bool _pi_d_mode;
   
   // State
   int16_t _last_sp, _last_out;
+  int16_t _last_fb;
   int64_t _sum;
   int32_t _last_err;
 };
