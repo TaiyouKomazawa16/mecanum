@@ -10,6 +10,8 @@
 #include "FastPID.h"
 
 #define RADPS_RANGE 1000
+//モータードライバのブートストラップを考慮
+#define PWM_MARGIN 2
 
 class Wheel
 {
@@ -21,7 +23,8 @@ public:
         _qei = qei;
         _pid = pid;
 
-        _pid->setOutputConfig(9, true);
+        _pid->set_pi_d_mode(true);
+        _pid->setOutputRange(-256+PWM_MARGIN, 255-PWM_MARGIN);
 
         _last_rev = get_revolution();
         _last_micros = micros();
