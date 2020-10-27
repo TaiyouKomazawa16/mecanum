@@ -24,10 +24,11 @@ public:
     {
         int x_mmps = 1000 * x_mps;
         int y_mmps = 1000 * y_mps;
-        int fl = -(x_mmps - y_mmps - theta * _wheel_span);
-        int rl = -(x_mmps + y_mmps - theta * _wheel_span);
-        int rr = x_mmps - y_mmps + theta * _wheel_span;
-        int fr = x_mmps + y_mmps + theta * _wheel_span;
+        int rot = theta * _wheel_span;
+        int fl = -(x_mmps - y_mmps - rot);
+        int rl = -(x_mmps + y_mmps - rot);
+        int rr = x_mmps - y_mmps + rot;
+        int fr = x_mmps + y_mmps + rot;
         
         _FLeft->set_mmps(fl);
         _RLeft->set_mmps(rl);
