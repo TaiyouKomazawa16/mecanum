@@ -119,7 +119,7 @@ MPU6050 mpu;
 // format used for the InvenSense teapot demo
 //#define OUTPUT_TEAPOT
 
-
+#define USE_OLD_DMPGETYAWPITCHROLL
 
 #define INTERRUPT_PIN 2  // use pin 2 on Arduino Uno & most boards
 #define LED_PIN 13 // (Arduino is 13, Teensy is 11, Teensy++ is 6)
@@ -135,23 +135,26 @@ uint8_t fifoBuffer[64]; // FIFO storage buffer
 
 // orientation/motion vars
 math_3d::Quaternion q; // [w, x, y, z]         quaternion container
-/*
-VectorInt16 aa;         // [x, y, z]            accel sensor measurements
-VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
-VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
-VectorFloat gravity;    // [x, y, z]            gravity vector
+
+math_3d::VectorInt16 gyro; // [x, y, z]
+
+math_3d::VectorInt16 aa;         // [x, y, z]            accel sensor measurements
+math_3d::VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
+math_3d::VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
+math_3d::VectorFloat gravity;    // [x, y, z]            gravity vector
+
 float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
-
+/*
 // packet structure for InvenSense teapot demo
 uint8_t teapotPacket[14] = { '$', 0x02, 0,0, 0,0, 0,0, 0,0, 0x00, 0x00, '\r', '\n' };
 */
 
 #include <PlainSerial.h>
-#include <msg/Quaternion.h>
+#include "ImuMsg.h"
 
 PlainSerial uart(&Serial);
-Quaternion imu_frame;
+ImuMsg imu;
 
     // ================================================================
     // ===               INTERRUPT DETECTION ROUTINE                ===
@@ -268,9 +271,30 @@ void loop() {
     if (!dmpReady) return;
     // read a packet from FIFO
     if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
+        mpu.dmpGetQuaternion(&q, fifoBuffer);
+        mpu.dmpGetAccel(&aa, fifoBuffer);
+        mpu.dmpGetGravity(&gravity, &q);
+        mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+        mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
+
+        imu.data.pose.w = q.w;
+        imu.data.pose.x = q.y;
+        imu.data.pose.y = -q.x;
+        imu.data.pose.z = q.z;
+
+        imu.data.acc.x = aaReal.x;
+        imu.data.acc.y = aaReal.y;
+        imu.data.acc.z = aaReal.z;
+
+        imu.data.gyro.x = ypr[2];
+        imu.data.gyro.y = ypr[1];
+        imu.data.gyro.z = ypr[0];
+        
+        uart.write(0, &imu);
+
         #ifdef OUTPUT_READABLE_QUATERNION
             // display quaternion values in easy matrix form: w x y z
-            mpu.dmpGetQuaternion(&q, fifoBuffer);
+            //mpu.dmpGetQuaternion(&q, fifoBuffer);
             /*
             Serial.print("quat\t");
             Serial.print(q.w);
@@ -281,14 +305,8 @@ void loop() {
             Serial.print("\t");
             Serial.println(q.z);
             */
-            imu_frame.w(q.w);
-            imu_frame.x(q.y);
-            imu_frame.y(-q.x);
-            imu_frame.z(q.z);
-        
-            uart.write(0, &imu_frame);
 
-#endif
+        #endif
 
         #ifdef OUTPUT_READABLE_EULER
             // display Euler angles in degrees
