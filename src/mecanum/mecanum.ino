@@ -71,10 +71,10 @@ void init_qei()
 void init_pid()
 {
                         /*kp    ki    kd   ctrl_freq*/
-  pid[0] = new FastPID  (0.6, 0.2, 0.003, 200 /*Hz*/, true);
-  pid[1] = new FastPID  (0.6, 0.2, 0.003, 200 /*Hz*/, true);
-  pid[2] = new FastPID  (0.6, 0.2, 0.003, 200 /*Hz*/, true);
-  pid[3] = new FastPID  (0.6, 0.2, 0.003, 200 /*Hz*/, true);
+  pid[0] = new FastPID  (1.1, 0.5, 0.0001, 200 /*Hz*/, true);
+  pid[1] = new FastPID  (1.1, 0.5, 0.0001, 200 /*Hz*/, true);
+  pid[2] = new FastPID  (1.1, 0.5, 0.0001, 200 /*Hz*/, true);
+  pid[3] = new FastPID  (1.1, 0.5, 0.0001, 200 /*Hz*/, true);
 }
 
 void init_wheels()
