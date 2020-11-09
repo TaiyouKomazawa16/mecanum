@@ -7,9 +7,10 @@
 class Mecanum4WD
 {
 public:
-    Mecanum4WD(Wheel *FLeft, Wheel *RLeft, Wheel *RRight, Wheel *FRight, int wheel_span)
+    Mecanum4WD(Wheel *FLeft, Wheel *RLeft, Wheel *RRight, Wheel *FRight, unsigned int wheel_span_x, unsigned int wheel_span_y)
     {
-        _wheel_span = wheel_span;
+        _ws_x = wheel_span_x/2;
+        _ws_y = wheel_span_y/2;
         _FLeft = FLeft;
         _RLeft = RLeft;
         _RRight = RRight;
@@ -24,7 +25,7 @@ public:
     {
         int x_mmps = 1000 * x_mps;
         int y_mmps = 1000 * y_mps;
-        int rot = theta * _wheel_span;
+        int rot = theta * (_ws_x+_ws_y);
         int fl = -(x_mmps - y_mmps - rot);
         int rl = -(x_mmps + y_mmps - rot);
         int rr = x_mmps - y_mmps + rot;
@@ -51,7 +52,7 @@ public:
         double div_x = (x - _prev_x) / dt;
         double div_y = (y - _prev_y) / dt;
 
-        theta = (-fl - rl + rr + fr) / (4.0 * _wheel_span); 
+        theta = (-fl - rl + rr + fr) / (4.0 * (_ws_x+_ws_y)); 
         x_vel = div_x*cos(theta) - div_y*sin(theta);
         y_vel = div_x*sin(theta) + div_y*cos(theta);
 
@@ -71,7 +72,8 @@ private:
     Wheel *_FLeft, *_RLeft, *_RRight, *_FRight;
     double _prev_x, _prev_y;
     long _prev_time;
-    int _wheel_span;
+    int _ws_x, _ws_y;
+    double _w_dir;
 };
 
 #endif

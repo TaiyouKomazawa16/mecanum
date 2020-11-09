@@ -25,26 +25,27 @@ Mecanum4WD *mv;
 /*
     Mecanum wheels
 
-      WHEEL_SPAN
+      WHEEL_SPAN_A
     |------------|
         Front         ---
     0 |--------| 3     |
       |\      /|       |
-  Left|        |Right  | WHEEL_SPAN
+  Left|        |Right  | WHEEL_SPAN_B
       |/      \|       |
     1 |--------| 2     |
-  y     Rear          ---
-  ↑
-   →x
+    x   Rear          ---
+    ↑
+  y←
  (yaw=CCW)
 */
 
 /*device parameters-----*/
 
-#define PPR         12  //Pulse Per Revolution
-#define GEAR_RATIO  64  //1/GEAR_RATIO (wheels/motors)
-#define WHEEL_CIR   314 //Wheel circumference[mm]
-#define WHEEL_SPAN  300 //[mm]
+#define PPR           12  //Pulse Per Revolution
+#define GEAR_RATIO    64  //1/GEAR_RATIO (wheels/motors)
+#define WHEEL_CIR     314 //Wheel circumference[mm]
+#define WHEEL_SPAN_A  280 //[mm]
+#define WHEEL_SPAN_B  250 //[mm]
 
 /*---------------------*/
 
@@ -83,7 +84,7 @@ void init_wheels()
                       new Wheel(md[1], qei[1], pid[1], PPR, GEAR_RATIO, WHEEL_CIR),
                       new Wheel(md[2], qei[2], pid[2], PPR, GEAR_RATIO, WHEEL_CIR),
                       new Wheel(md[3], qei[3], pid[3], PPR, GEAR_RATIO, WHEEL_CIR),
-                      WHEEL_SPAN );
+                      WHEEL_SPAN_B, WHEEL_SPAN_A);
 }
 
 double odom_y = 0, odom_x = 0, odom_yaw = 0;
