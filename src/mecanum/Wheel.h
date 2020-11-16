@@ -23,6 +23,8 @@ public:
         _qei = qei;
         _pid = pid;
 
+        _rps = 0;
+
         _pid->set_pi_d_mode(true);
         _pid->setOutputRange(-256+PWM_MARGIN, 255-PWM_MARGIN);
 
@@ -55,7 +57,13 @@ public:
         double diff = get_revolution() - _last_rev;
         _last_rev = get_revolution();
         _last_micros = micros();
-        return diff/sec;
+        _rps = diff/sec;
+        return _rps;
+    }
+
+    double get_last_rps()
+    {
+        return _rps;
     }
 
     void set_rads(double rads)
@@ -90,6 +98,7 @@ private:
     const int _round_mm;
 
     double _last_rev;
+    double _rps;
     unsigned long _last_micros;
 };
 
