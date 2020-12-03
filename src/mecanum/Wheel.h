@@ -16,8 +16,8 @@
 class Wheel
 {
 public:
-    Wheel(MotorDriver *md, SoftwareQEI *qei, FastPID *pid, const int ppr, const int gear_ratio=1, const int round_mm = 1)
-    :   _rate(ppr * gear_ratio * 4), _round_mm(round_mm)
+    Wheel(MotorDriver *md, SoftwareQEI *qei, FastPID *pid, const int ppr, const int gear_ratio=1, const int round_mm = 1, bool dir_reverse=false)
+    :   _rate(ppr * gear_ratio * 4), _round_mm(round_mm), M_2PI(2*M_PI), _reverse(dir_reverse)
     {
         _md = md;
         _qei = qei;
@@ -69,14 +69,24 @@ public:
     void set_rads(double rads)
     {
         int16_t pwm = _pid->step(rads * RADPS_RANGE, M_2PI*get_rps() * RADPS_RANGE);
-        _md->drive(pwm);
+        set_pwm(pwm);
     }
 
     void set_mmps(int mmps)
     {
         int feed_mmps = _round_mm * get_rps();
-        int16_t pwm = _pid->step(mmps, feed_mmps);
-        _md->drive(pwm);
+        set_pwm(_pid->step(mmps, feed_mmps));
+    }
+
+    inline void set_pwm(int16_t duty)
+    {
+        _pwm = duty * ((_reverse) ? -1 : 1);
+        _md->drive(_pwm);
+    }
+
+    int16_t get_pwm()
+    {
+        return _pwm;
     }
 
     void reset()
@@ -89,7 +99,7 @@ public:
 
     
 private:
-    const static double M_2PI;
+    const double M_2PI;
 
     MotorDriver *_md;
     SoftwareQEI *_qei;
@@ -99,9 +109,10 @@ private:
 
     double _last_rev;
     double _rps;
+    int16_t _pwm;
     unsigned long _last_micros;
-};
 
-const static double Wheel::M_2PI = 2*M_PI;
+    bool _reverse;
+};
 
 #endif

@@ -26,4 +26,18 @@ void pcint_removeQEICh(uint8_t, uint8_t, uint8_t, int);
 #endif
 #endif
 
+#ifdef ARDUINO_ARCH_STM32
+
+#include<WInterrupts.h>
+
+#define NUMOF_QEICH 4
+
+void QEI_EVENT_ISR(void);
+void QEI_EVENT_Z_ISR(void);
+int pcint_addQEICh(uint8_t, uint8_t, uint8_t, uint8_t*, long*, uint8_t);
+void pcint_removeQEICh(uint8_t, uint8_t, uint8_t, int);
+
+
+#endif 
+
 #endif /* PCINTQEI_H_ */
