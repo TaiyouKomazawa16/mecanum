@@ -7,7 +7,6 @@ FastPID::~FastPID() {
 
 void FastPID::clear() {
   _last_sp = 0; 
-  _last_out = 0;
   _last_fb = 0;
   _sum = 0; 
   _last_err = 0;
@@ -123,6 +122,7 @@ int16_t FastPID::step(int16_t sp, int16_t fb) {
     D = int32_t(_d) * int32_t(deriv);
   }else if(_d){
     int32_t deriv = fb - _last_fb;
+    _last_fb = fb;
     // Limit the derivative to 16-bit signed value.
     if (deriv > DERIV_MAX)
       deriv = DERIV_MAX;

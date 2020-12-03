@@ -59,8 +59,7 @@ private:
   bool _pi_d_mode;
   
   // State
-  int16_t _last_sp, _last_out;
-  int16_t _last_fb;
+  int16_t _last_sp, _last_fb;
   int64_t _sum;
   int32_t _last_err;
 };
