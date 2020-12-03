@@ -1,7 +1,6 @@
 #ifndef _MECANUM4WD_H_
 #define _MECANUM4WD_H_
 
-
 #include "Wheel.h"
 
 class Mecanum4WD
@@ -49,10 +48,10 @@ public:
         double dt = (millis() - _prev_time);
         _prev_time = millis();
         
-        double div_x = (x - _prev_x) / dt;
-        double div_y = (y - _prev_y) / dt;
+        double div_x = (x - _prev_x) / dt; //[mm] / [ms] = [m/s]
+        double div_y = (y - _prev_y) / dt; //[mm] / [ms] = [m/s]
 
-        theta = (-fl - rl + rr + fr) / (4.0 * (_ws_x+_ws_y)); 
+        theta = (-fl - rl + rr + fr) / (4.0 * (_ws_x+_ws_y));
         x_vel = div_x*cos(theta) - div_y*sin(theta);
         y_vel = div_x*sin(theta) + div_y*cos(theta);
 
