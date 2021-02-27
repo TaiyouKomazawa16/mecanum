@@ -17,7 +17,7 @@ class Wheel
 {
 public:
     Wheel(MotorDriver *md, SoftwareQEI *qei, FastPID *pid, const int ppr, const int gear_ratio=1, const int round_mm = 1, bool dir_reverse=false)
-    :   _rate(ppr * gear_ratio * 4), _round_mm(round_mm), M_2PI(2*M_PI), _reverse(dir_reverse)
+    :   _rate(4*ppr*gear_ratio), _round_mm(round_mm), M_2PI(2*M_PI), _reverse(dir_reverse)
     {
         _md = md;
         _qei = qei;
@@ -50,7 +50,7 @@ public:
     double get_rps()
     {
         double sec = (micros() - _last_micros) / 1.0e6;
-        while(sec == 0){ 
+        while(sec == 0){
           sec = (micros() - _last_micros) / 1.0e6;
           delay(1);
         }
@@ -97,7 +97,7 @@ public:
         _pid->clear();
     }
 
-    
+
 private:
     const double M_2PI;
 
@@ -112,7 +112,7 @@ private:
     int16_t _pwm;
     unsigned long _last_micros;
 
-    bool _reverse;
+    const bool _reverse;
 };
 
 #endif

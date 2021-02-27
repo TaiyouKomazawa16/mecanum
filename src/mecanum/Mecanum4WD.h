@@ -7,9 +7,8 @@ class Mecanum4WD
 {
 public:
     Mecanum4WD(Wheel *FLeft, Wheel *RLeft, Wheel *RRight, Wheel *FRight, unsigned int wheel_span_x, unsigned int wheel_span_y)
+    :   _ws_x(wheel_span_x/2), _ws_y(wheel_span_y/2)
     {
-        _ws_x = wheel_span_x/2;
-        _ws_y = wheel_span_y/2;
         _FLeft = FLeft;
         _RLeft = RLeft;
         _RRight = RRight;
@@ -29,14 +28,14 @@ public:
         int rl = -(x_mmps + y_mmps - rot);
         int rr = x_mmps - y_mmps + rot;
         int fr = x_mmps + y_mmps + rot;
-        
+
         _FLeft->set_mmps(fl);
         _RLeft->set_mmps(rl);
         _RRight->set_mmps(rr);
         _FRight->set_mmps(fr);
     }
 
-    void get_odom(double &x_vel, double &y_vel, double &theta) 
+    void get_odom(double &x_vel, double &y_vel, double &theta)
     {
         double fl = - _FLeft->get_mm();
         double rl = - _RLeft->get_mm();
@@ -47,7 +46,7 @@ public:
         double y = ((-fl + rl - rr + fr) / 4.0);
         double dt = (millis() - _prev_time);
         _prev_time = millis();
-        
+
         double div_x = (x - _prev_x) / dt; //[mm] / [ms] = [m/s]
         double div_y = (y - _prev_y) / dt; //[mm] / [ms] = [m/s]
 
@@ -71,8 +70,7 @@ private:
     Wheel *_FLeft, *_RLeft, *_RRight, *_FRight;
     double _prev_x, _prev_y;
     long _prev_time;
-    int _ws_x, _ws_y;
-    double _w_dir;
+    const int _ws_x, _ws_y;
 };
 
 #endif
